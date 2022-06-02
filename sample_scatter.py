@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 
-from dataset import xor_samples
+from dataset import xor_sampler
 
 
-x, y = xor_samples(100)
+x, y = xor_sampler(100)
 
 fig = plt.figure()
 plt.scatter(x[:,0], x[:,1], c=y)

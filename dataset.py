@@ -1,12 +1,13 @@
 import numpy as np
 
-def xor_samples(n):
-    points = np.random.uniform(-1, 1, [n, 2])
+def xor_sampler(n):
+    points = np.random.uniform(0, 1, [n, 2])
 
+    d = 0.5
     x = points
     labels = np.logical_or(
-        np.logical_and(x[:, 0] > 0., x[:, 1] > 0.),
-        np.logical_and(x[:, 0] < 0., x[:, 1] < 0.))
+        np.logical_and(x[:, 0] > d, x[:, 1] > d),
+        np.logical_and(x[:, 0] < d, x[:, 1] < d))
     
     labels = labels.astype(int)
 
