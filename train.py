@@ -7,10 +7,14 @@ import matplotlib.pyplot as plt
 from dataset import xor_sampler
 
 epochs = 1000
-batch_size = 64
+batch_size = 128
 
 model = nn.Sequential(
-    nn.Linear(2, 1),
+    nn.Linear(2, 16),
+    nn.ReLU(),
+    nn.Linear(16, 16),
+    nn.ReLU(),
+    nn.Linear(16, 1),
     nn.Sigmoid(),
 )
 
