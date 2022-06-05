@@ -18,6 +18,7 @@ n_hs = [n_h for _ in range(n_l)]
 
 model_names = ['loopnet', 'naivenet']
 losses = {}
+accuracy = {}
 for model_name in model_names:
     if model_name == 'loopnet': 
         model = LoopNet(
@@ -30,11 +31,14 @@ for model_name in model_names:
             n_x=2,
             n_y=1,
             n_hs=n_hs)
+    
+    model.train()
 
     optimizer = optim.Adam(model.parameters())
     criterion = nn.BCELoss()
 
     model_losses = []
+    model_accuracy = []
     for epoch in tqdm(range(epochs)):
         x, y = xor_sampler(batch_size)
 
@@ -49,10 +53,19 @@ for model_name in model_names:
         optimizer.step()
 
         model_losses.append(loss.item())
+
+        # Computer accuracy
+        acc = torch.sum(torch.round(y_hat) == y)
+
+        model_accuracy.append(acc)
     
     losses[model_name] = model_losses
+    accuracy[model_name] = model_accuracy
 
 
+### Plots
+
+# Plot training loss
 fig = plt.figure()
 plt.title('Training loss')
 for model_name in model_names:
@@ -61,4 +74,16 @@ plt.ylabel('Loss')
 plt.xlabel('Timestep')
 plt.legend()
 plt.savefig('training_loss.png')
+plt.close(fig)
+
+
+# Plot training accuracy
+fig = plt.figure()
+plt.title('Training accuracy')
+for model_name in model_names:
+    plt.plot(accuracy[model_name], label=model_name)
+plt.ylabel('Accuracy')
+plt.xlabel('Timestep')
+plt.legend()
+plt.savefig('training_accuracy.png')
 plt.close(fig)
