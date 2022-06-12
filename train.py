@@ -4,16 +4,21 @@ import torch.optim as optim
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-from dataset import xor_sampler
+from dataset import XORSampler
 from model import LoopNet, NaiveNet
 
 
 epochs = 1000
 batch_size = 64
+dims=3
 
 n_h = 32
 n_l = 5
 n_hs = [n_h for _ in range(n_l)]
+
+xor_sampler = XORSampler(
+    batch_size=batch_size,
+    dims=dims)
 
 
 model_names = ['loopnet', 'naivenet']
@@ -22,13 +27,13 @@ accuracy = {}
 for model_name in model_names:
     if model_name == 'loopnet': 
         model = LoopNet(
-            n_x=2,
+            n_x=dims,
             n_h=sum(n_hs),
             n_y=1,
             loops=n_l + 1)
     elif model_name == 'naivenet':
         model = NaiveNet(
-            n_x=2,
+            n_x=dims,
             n_y=1,
             n_hs=n_hs)
     
@@ -40,7 +45,7 @@ for model_name in model_names:
     model_losses = []
     model_accuracy = []
     for epoch in tqdm(range(epochs)):
-        x, y = xor_sampler(batch_size)
+        x, y = xor_sampler.sample()
 
         x = torch.from_numpy(x).float()
         y = torch.unsqueeze(torch.from_numpy(y), axis=1).float()

@@ -1,14 +1,12 @@
 import numpy as np
 
-def xor_sampler(n):
-    points = np.random.uniform(0, 1, [n, 2])
+class XORSampler():
+    def __init__(self, batch_size=32, dims=2):
+        self.batch_size = batch_size
+        self.dims = dims
 
-    d = 0.5
-    x = points
-    labels = np.logical_or(
-        np.logical_and(x[:, 0] > d, x[:, 1] > d),
-        np.logical_and(x[:, 0] < d, x[:, 1] < d))
-    
-    labels = labels.astype(int)
+    def sample(self):
+        points = np.random.uniform(0, 1, [self.batch_size, self.dims])
+        labels = np.sum(np.round(points), axis=1) % 2
 
-    return points, labels
+        return points, labels
